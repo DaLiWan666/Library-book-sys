@@ -1,0 +1,27 @@
+<!-- main/templates/student_return_book.html -->
+{% extends 'base.html' %}
+
+{% block title %}归还图书 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">归还图书</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="mb-3">
+                        {{ form.borrow_record.label_tag }}
+                        {{ form.borrow_record }}
+                        {{ form.borrow_record.errors }}
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">归还</button>
+                </form>
+                <a href="{% url 'student_borrow_return' %}" class="btn btn-secondary w-100 mt-2">返回</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

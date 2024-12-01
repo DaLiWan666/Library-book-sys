@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}主页 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4">欢迎, {{ user.username }}</h1>
+
+    {% if is_admin %}
+        <h2>管理员功能</h2>
+        <div class="d-grid gap-3 col-6 mx-auto">
+            <a href="{% url 'user_management' %}" class="btn btn-outline-primary btn-lg">用户管理</a>
+            <a href="{% url 'book_management' %}" class="btn btn-outline-success btn-lg">图书管理</a>
+            <a href="{% url 'borrow_return' %}" class="btn btn-outline-warning btn-lg">借阅归还</a>
+        </div>
+    {% elif is_student %}
+        <h2>学生功能</h2>
+        <div class="d-grid gap-3 col-6 mx-auto">
+            <a href="{% url 'view_books' %}" class="btn btn-outline-info btn-lg">查看图书</a>
+            <a href="{% url 'student_borrow_return' %}" class="btn btn-outline-warning btn-lg">我的借阅记录</a>
+        </div>
+    {% else %}
+        <p>无法识别的用户角色。</p>
+    {% endif %}
+</div>
+{% endblock %}

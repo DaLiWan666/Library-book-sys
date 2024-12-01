@@ -1,0 +1,37 @@
+<!-- main/templates/view_books.html -->
+{% extends 'base.html' %}
+
+{% block title %}查看图书{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>图书列表</h2>
+
+    <!-- 搜索表单 -->
+    <form class="d-flex mb-3" method="GET" action="{% url 'view_books' %}">
+        <input class="form-control me-2" type="search" name="search" placeholder="搜索书名" aria-label="Search" value="{{ query }}">
+        <button class="btn btn-outline-success" type="submit">搜索</button>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>书名</th>
+                <th>作者</th>
+                <th>ISBN</th>
+                <th>可借状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{% if book.available %}可借{% else %}不可借{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

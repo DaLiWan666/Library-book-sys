@@ -1,0 +1,60 @@
+<!-- main/templates/user_management.html -->
+{% extends 'base.html' %}
+
+{% block title %}用户管理 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4>用户管理</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>用户名</th>
+                    <th>电子邮件</th>
+                    <th>角色</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                                超级管理员
+                            {% else %}
+                                {% if user.groups.first %}
+                                    {{ user.groups.first.name }}
+                                {% else %}
+                                    未分配
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user != request.user %}
+                                <a href="{% url 'set_user_role' user.id %}" class="btn btn-sm btn-warning me-2">设置角色</a>
+                                <form action="{% url 'delete_user' user.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该用户吗？');">删除</button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted">当前用户</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">暂无用户信息。</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

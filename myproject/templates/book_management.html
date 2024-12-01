@@ -1,0 +1,59 @@
+<!-- main/templates/book_management.html -->
+{% extends 'base.html' %}
+
+{% block title %}图书管理 - 图书馆管理系统{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>图书管理</h4>
+
+    <!-- 搜索表单 -->
+    <form class="d-flex" method="GET" action="{% url 'book_management' %}">
+        <input class="form-control me-2" type="search" name="search" placeholder="搜索书名" aria-label="Search" value="{{ query }}">
+        <button class="btn btn-outline-success" type="submit">搜索</button>
+    </form>
+
+    <a href="{% url 'add_book' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i> 添加图书
+    </a>
+</div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>ISBN</th>
+                    <th>可借状态</th>
+                    <th>入库时间</th>  <!-- 新增列 -->
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.isbn }}</td>
+                        <td>{{ book.available|yesno:"是,否" }}</td>
+                        <td>{{ book.created_at|date:"Y-m-d H:i" }}</td>  <!-- 入库时间格式化 -->
+                        <td>
+                            <form action="{% url 'delete_book' book.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('确定删除该图书吗？');">删除</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">暂无图书信息。</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
